@@ -60,4 +60,3 @@ public class Department implements Serializable{  // Serializable para que os ob
 		return "Department [id=" + id + ", name=" + name + "]";
 	}
 }
-
