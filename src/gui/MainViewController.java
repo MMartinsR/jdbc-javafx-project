@@ -15,6 +15,7 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.VBox;
+import model.services.DepartmentService;
 
 public class MainViewController implements Initializable {
 	
@@ -35,7 +36,7 @@ public class MainViewController implements Initializable {
 	
 	@FXML
 	public void onMenuItemDepartmentAction() {
-		loadView("/gui/DepartmentList.fxml");
+		loadView2("/gui/DepartmentList.fxml");
 	}
 	
 	@FXML
@@ -70,11 +71,38 @@ public class MainViewController implements Initializable {
 			// agora vamos colocar o menu novamente e os filhos do newVBox
 			mainVBox.getChildren().add(mainMenu);
 			mainVBox.getChildren().addAll(newVBox.getChildren());
+	
+		}
+		catch (IOException e) {
+			Alerts.showAlert("IOException", "Error loading view", e.getMessage(), AlertType.ERROR);
+		}
+	}
+	
+	private synchronized void loadView2 (String absoluteName) {
+		
+		try {
+			FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteName));  // permite carregar uma tela fxml passada por parâmetro
+			VBox newVBox = loader.load();
 			
+			Scene mainScene = Main.getMainScene();  // pegou a referência para a cena principal
+			// pegamos uma referência ao primeiro elemento da tela principal que é um scrollpane, então faz se casting 
+			// para o compilador entender que é um scrollpane e depois pegamos o conteudo esse scrollpane.
+			// E o que falta fazer é um casting para VBox, e então teremos uma referência para o VBox que está dentro do scrollpane.
+			VBox mainVBox = (VBox) ((ScrollPane)mainScene.getRoot()).getContent();
 			
+			// Vamos guardar uma referência para o menu principal, chamando o mainVBox e pegando os filhos dele, na primeira posição
+			// e quem é o primeiro filho do mainVBox? é o menu principal.
+			Node mainMenu = mainVBox.getChildren().get(0);
+			// agora vamos limpar os filhos do mainVBox para substituir pelos filhos do newVBox
+			mainVBox.getChildren().clear();
+			// agora vamos colocar o menu novamente e os filhos do newVBox
+			mainVBox.getChildren().add(mainMenu);
+			mainVBox.getChildren().addAll(newVBox.getChildren());
 			
-			
-			
+			DepartmentListController controller = loader.getController(); // pegando referência para o controller da view Department
+			controller.setDepartmentService(new DepartmentService());
+			controller.updateTableView();
+	
 		}
 		catch (IOException e) {
 			Alerts.showAlert("IOException", "Error loading view", e.getMessage(), AlertType.ERROR);
