@@ -99,6 +99,7 @@ public class DepartmentListController implements Initializable{
 			// vamos pegar uma referência para o controlador da tela de formulário de departamento
 			DepartmentFormController controller = loader.getController();
 			controller.setDepartment(depObj);
+			controller.setDepartmentService(new DepartmentService());
 			controller.updateFormData();
 			
 			// Como será carregado uma tela nova na frente da outra, temos que criar um novo palco
