@@ -47,7 +47,8 @@ public class DepartmentListController implements Initializable{
 	@FXML
 	public void onBtNewAction(ActionEvent event) {
 		Stage parentStage = Utils.currentStage(event);  // pegamos a referência para o palco atual através do evento que foi ativado nele
-		createDialogForm("/gui/DepartmentForm.fxml", parentStage);
+		Department depObj = new Department();
+		createDialogForm(depObj, "/gui/DepartmentForm.fxml", parentStage);
 	}
 	
 	public void setDepartmentService (DepartmentService service) {  // acoplamento fraco, inversão de controle, injeção de dependência
@@ -89,11 +90,16 @@ public class DepartmentListController implements Initializable{
 		
 	}
 	// parentStage - palco que criou essa janela de dialogo
-	private void createDialogForm(String absoluteName, Stage parentStage) {
+	private void createDialogForm(Department depObj, String absoluteName, Stage parentStage) {
 		
 		try {
 			FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteName));
 			Pane pane = loader.load();
+			
+			// vamos pegar uma referência para o controlador da tela de formulário de departamento
+			DepartmentFormController controller = loader.getController();
+			controller.setDepartment(depObj);
+			controller.updateFormData();
 			
 			// Como será carregado uma tela nova na frente da outra, temos que criar um novo palco
 			// setar uma nova cena, já que é um palco diferente
