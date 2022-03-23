@@ -1,9 +1,12 @@
 package gui;
 
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 
 import db.DbException;
+import gui.listeners.DataChangeListener;
 import gui.util.Alerts;
 import gui.util.Constraints;
 import gui.util.Utils;
@@ -21,6 +24,8 @@ public class DepartmentFormController implements Initializable{
 	
 	private Department entity;  // dependência de Department criada no formulario de controle
 	private DepartmentService service; // dependência de DepartmentService no form controller
+	
+	private List<DataChangeListener> dataChangeListeners = new ArrayList<>();  // essa lista guarda objetos que querem receber um evento
 	
 	@FXML
 	private TextField txtId;
@@ -45,6 +50,10 @@ public class DepartmentFormController implements Initializable{
 		this.service = service;
 	}
 	
+	public void subscribeDataChangeListener(DataChangeListener listener) {
+		dataChangeListeners.add(listener);  // todo objeto que implementa a interface datachangelistener poderá ser adicionado a lista datachangelisteners
+	}
+	
 	
 	@FXML
 	public void onBtSaveAction(ActionEvent event) {
@@ -58,6 +67,7 @@ public class DepartmentFormController implements Initializable{
 		try {
 			entity = getFormData();
 			service.saveOrUpdate(entity);
+			notifyDataChangeListeners(); // precisamos notificar os listener toda vez que um evento for ativado, usamos um método para isso
 			Utils.currentStage(event).close();
 		}
 		catch(DbException e) {
@@ -66,6 +76,14 @@ public class DepartmentFormController implements Initializable{
 		
 	}
 	
+	private void notifyDataChangeListeners() {
+		// notificar os listeners consiste em executar o método declarado na interface datachangelistener em cada um dos 
+		// listeners que estiverem na lista, ou seja, emitir o evento ondatachanged da interface para os listeners.
+		for (DataChangeListener listener : dataChangeListeners) {
+			listener.onDataChanged();
+		}
+	}
+
 	private Department getFormData() {
 		Department obj = new Department();
 		obj.setId(Utils.tryParseToInt(txtId.getText()));
