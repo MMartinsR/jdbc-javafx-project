@@ -1,5 +1,6 @@
 package gui;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.Date;
 import java.util.List;
@@ -15,7 +16,9 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
@@ -23,6 +26,8 @@ import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.Pane;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import model.entities.Seller;
 import model.services.SellerService;
@@ -114,35 +119,35 @@ public class SellerListController implements Initializable, DataChangeListener{
 	}
 	// parentStage - palco que criou essa janela de dialogo
 	private void createDialogForm(Seller depObj, String absoluteName, Stage parentStage) {
-//		
-//		try {
-//			FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteName));
-//			Pane pane = loader.load();
-//			
-//			// vamos pegar uma referência para o controlador da tela de formulário de departamento
-//			SellerFormController controller = loader.getController();
-//			controller.setSeller(depObj);
-//			controller.setSellerService(new SellerService());
-//			controller.subscribeDataChangeListener(this);  // passa para o método um objeto que implementa a interface datachangelistener, que no caso é o próprio controller.
-//			controller.updateFormData();
-//			
-//			// Como será carregado uma tela nova na frente da outra, temos que criar um novo palco
-//			// setar uma nova cena, já que é um palco diferente
-//			// para inicializar esse dialogStage temos que passar o Stage pai para ele
-//			Stage dialogStage = new Stage();
-//			dialogStage.setTitle("Enter Seller data");
-//			dialogStage.setScene(new Scene(pane));
-//			dialogStage.setResizable(false);
-//			dialogStage.initOwner(parentStage);
-//			dialogStage.initModality(Modality.WINDOW_MODAL);  // trava a tela enquanto ela estiver ativa não pode interagir com outras
-//			dialogStage.showAndWait();
-//			
-//			
-//		} catch (IOException e) {
-//			
-//			Alerts.showAlert("IOException", "Error loading view", e.getMessage(), AlertType.ERROR);
-//		}		
-//		
+		
+		try {
+			FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteName));
+			Pane pane = loader.load();
+			
+			// vamos pegar uma referência para o controlador da tela de formulário de departamento
+			SellerFormController controller = loader.getController();
+			controller.setSeller(depObj);
+			controller.setSellerService(new SellerService());
+			controller.subscribeDataChangeListener(this);  // passa para o método um objeto que implementa a interface datachangelistener, que no caso é o próprio controller.
+			controller.updateFormData();
+			
+			// Como será carregado uma tela nova na frente da outra, temos que criar um novo palco
+			// setar uma nova cena, já que é um palco diferente
+			// para inicializar esse dialogStage temos que passar o Stage pai para ele
+			Stage dialogStage = new Stage();
+			dialogStage.setTitle("Enter Seller data");
+			dialogStage.setScene(new Scene(pane));
+			dialogStage.setResizable(false);
+			dialogStage.initOwner(parentStage);
+			dialogStage.initModality(Modality.WINDOW_MODAL);  // trava a tela enquanto ela estiver ativa não pode interagir com outras
+			dialogStage.showAndWait();
+			
+			
+		} catch (IOException e) {
+			
+			Alerts.showAlert("IOException", "Error loading view", e.getMessage(), AlertType.ERROR);
+		}		
+		
 	}
 
 	@Override
