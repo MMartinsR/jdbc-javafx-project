@@ -15,33 +15,43 @@ import javafx.stage.Stage;
 import javafx.util.StringConverter;
 
 public class Utils {
-	
+
 	/**
-	 * Método para retornar o palco atual.
-	 * Primeiramente, ele pega o objeto onde aconteceu o evento através de sua origem que é de tipo Object, 
-	 * então, faz o downcasting para Node, em seguida, pega a cena atravês desse objeto Node e em seguida a janela através da cena
-	 * como a janela é uma superclasse do palco que é o que queremos, faz-se o downcasting para Stage.
+	 * Método para retornar o palco atual. Primeiramente, ele pega o objeto onde
+	 * aconteceu o evento através de sua origem que é de tipo Object, então, faz o
+	 * downcasting para Node, em seguida, pega a cena atravês desse objeto Node e em
+	 * seguida a janela através da cena como a janela é uma superclasse do palco que
+	 * é o que queremos, faz-se o downcasting para Stage.
+	 * 
 	 * @return
 	 */
-	public static Stage currentStage(ActionEvent event) {		
-		return (Stage) ((Node) event.getSource()).getScene().getWindow();		
+	public static Stage currentStage(ActionEvent event) {
+		return (Stage) ((Node) event.getSource()).getScene().getWindow();
 	}
-	
+
 	public static Integer tryParseToInt(String str) {
-		
+
 		try {
 			return Integer.parseInt(str);
-		}
-		catch(NumberFormatException e) {
+		} catch (NumberFormatException e) {
 			return null;
 		}
 	}
-	
+
+	public static Double tryParseToDouble(String str) {
+
+		try {
+			return Double.parseDouble(str);
+		} catch (NumberFormatException e) {
+			return null;
+		}
+	}
+
 	public static <T> void formatTableColumnDate(TableColumn<T, Date> tableColumn, String format) {
 		tableColumn.setCellFactory(column -> {
 			TableCell<T, Date> cell = new TableCell<T, Date>() {
 				private SimpleDateFormat sdf = new SimpleDateFormat(format);
-				
+
 				@Override
 				protected void updateItem(Date item, boolean empty) {
 					super.updateItem(item, empty);
@@ -55,11 +65,11 @@ public class Utils {
 			return cell;
 		});
 	}
-	
+
 	public static <T> void formatTableColumnDouble(TableColumn<T, Double> tableColumn, int decimalPlaces) {
 		tableColumn.setCellFactory(column -> {
 			TableCell<T, Double> cell = new TableCell<T, Double>() {
-				
+
 				@Override
 				protected void updateItem(Double item, boolean empty) {
 					super.updateItem(item, empty);
@@ -74,16 +84,16 @@ public class Utils {
 			return cell;
 		});
 	}
-	
+
 	public static void formatDatePicker(DatePicker datePicker, String format) {
 		datePicker.setConverter(new StringConverter<LocalDate>() {
-			
+
 			DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern(format);
-			
+
 			{
 				datePicker.setPromptText(format.toLowerCase());
 			}
-			
+
 			@Override
 			public String toString(LocalDate date) {
 				if (date != null) {
@@ -92,7 +102,7 @@ public class Utils {
 					return "";
 				}
 			}
-			
+
 			@Override
 			public LocalDate fromString(String string) {
 				if (string != null && !string.isEmpty()) {
